@@ -20,6 +20,10 @@
     />
     <script
       type="text/javascript"
+      src="{{ url_for('static', filename='popper.min.js') }}"
+    ></script>
+    <script
+      type="text/javascript"
       src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"
     ></script>
     <script
@@ -66,18 +70,22 @@
                 <a class="nav-link" href="/categories">Categories</a>
               </li>
               {% if session.user %}
-              <li class="nav-item">
-                <a class="nav-link" href="/new/post">New Post</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/{{session.user_id}}/posts"
-                  >My Posts</a
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
                 >
+                  Posts
+                </a>
+                <ul class="dropdown-menu card-dark">
+                  <li><a class="ps-3" href="/new/post">New Post<a></li>
+                  <li><a class="ps-3" href="/{{session.user_id}}/posts">My Posts</a></li>
+                </ul>
               </li>
               {% endif %}
-              <!-- <li>
-                <a href="#" class="nav-link">About</a>
-              </li> -->
             </ul>
             <div class="navbar-nav align-items-baseline">
               {% if session.user %} {% set greetings = ['Hola', 'Welcome', 'Hi',
