@@ -196,11 +196,12 @@ block content %}
             {% for comment in comments %}
             <div class="row">
               <div class="col">
-                <p class="mb-1">{{comment.content}}</p>
+                <p class="text-success mb-1">{{comment.alias}}</p>
+                <p class="ps-3 mb-1">{{comment.content}}</p>
               </div>
               <div class="col-3">
                 <p class="text-muted text-nowrap mb-1">
-                  {{comment.created_at.strftime('%m/%d/%Y')}}
+                  {{comment.time_since}} min. ago
                 </p>
               </div>
             </div>

@@ -7,7 +7,7 @@ tmdb.API_KEY = f"{os.getenv('API_KEY')}"
 @app.route('/<int:id>')
 def movie_posts(id):
     upms = db.session.query(User, Post, Movie).select_from(User).join(
-        Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Movie.tmdb_id == id).all()
+        Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Movie.tmdb_id == id).order_by(Post.created_at.desc()).all()
     print(upms)
     return render_template('feed.html', upms=upms, movie=upms[0][2], faved=faved(id), truncate=True, title=f"{upms[0][2].title} Posts | ReDirector")
 
@@ -15,7 +15,7 @@ def movie_posts(id):
 @app.route('/<int:id>/<string:type>')
 def movie_posts_by_type(id, type):
     upms = db.session.query(User, Post, Movie).select_from(User).join(
-        Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Movie.tmdb_id == id).filter(Post.type == type).all()
+        Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Movie.tmdb_id == id).filter(Post.type == type).order_by(Post.created_at.desc()).all()
     return render_template('feed.html', movie=upms[0][2], faved=faved(id), upms=upms, truncate=True, title=f"{type} Posts | {upms[0][2].title} | ReDirector")
 
 

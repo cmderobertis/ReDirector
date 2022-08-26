@@ -1,5 +1,9 @@
-from flask_app import app, db, render_template, request, redirect, bcrypt, session, flash, url_for, verify_logged_in
+from flask_app import app, db, render_template, request, redirect, bcrypt, session, flash, url_for, verify_logged_in, datetime, timedelta
 from models import User, Movie, Post, Comment, favorites, post_likes, comment_likes, faved
+import random
+
+names = ['kangaroo', 'lobster', 'shark', 'pizza',
+         'grapefruit', 'ostrich', 'zeppelin', 'cheese', 'ninja']
 
 
 @app.route('/new/post', methods=['POST', 'GET'])
@@ -27,23 +31,25 @@ def new_post():
 @app.route('/post/<int:id>')
 def view_post(id):
     upms = db.session.query(User, Post, Movie).select_from(User).join(
-        Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Post.id == id).first()
+        Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Post.id == id).order_by(Post.created_at.desc()).first()
     comments = db.session.query(Comment).filter(
         Comment.post_id == id).order_by(Comment.created_at).all()
+    for comment in comments:
+        comment.time_since = (datetime.now() - comment.created_at).seconds//60
     return render_template('feed.html', upms=[upms], movie=upms[2], comments=comments, truncate=False, faved=faved(upms[2].tmdb_id), title=f"{upms[2].title} | ReDirector")
 
 
 @app.route('/<string:type>')
 def view_posts_by_type(type):
     upms = db.session.query(User, Post, Movie).select_from(User).join(
-        Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Post.type == type).all()
+        Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Post.type == type).order_by(Post.created_at.desc()).all()
     return render_template('feed.html', upms=upms, truncate=True, title=f"{type} Posts | ReDirector")
 
 
 @app.route('/<int:user_id>/posts')
 def view_posts_by_user(user_id):
     upms = db.session.query(User, Post, Movie).select_from(User).join(
-        Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Post.user_id == user_id).all()
+        Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Post.user_id == user_id).order_by(Post.created_at.desc()).all()
     my = f"{upms[0][0].username}'s "
     if 'user_id' in session and user_id == session['user_id']:
         my = 'My '
@@ -53,7 +59,7 @@ def view_posts_by_user(user_id):
 @app.route('/<int:user_id>/posts/<string:type>')
 def view_posts_by_user_and_type(user_id, type):
     upms = db.session.query(User, Post, Movie).select_from(User).join(
-        Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Post.user_id == user_id).filter(Post.type == type).all()
+        Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Post.user_id == user_id).filter(Post.type == type).order_by(Post.created_at.desc()).all()
     my = None
     if 'user_id' in session and user_id == session['user_id']:
         my = 'My '
@@ -63,7 +69,7 @@ def view_posts_by_user_and_type(user_id, type):
 @app.route('/comment/<int:id>', methods=['POST'])
 def add_comment(id):
     content = request.form['content']
-    comment = Comment(content, session['user_id'], id)
+    comment = Comment(content, session['user_id'], id, random.choice(names))
     db.session.add(comment)
     db.session.commit()
     return redirect(f"/post/{id}")

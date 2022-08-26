@@ -5,7 +5,7 @@ import re
 import requests
 from dotenv import load_dotenv
 import os
-import datetime
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.secret_key = f"{os.getenv('SECRET_KEY')}"

@@ -1,4 +1,4 @@
-from flask_app import Flask, db, flash, EMAIL_REGEX, session, datetime
+from flask_app import Flask, db, flash, EMAIL_REGEX, session, datetime, timedelta
 
 
 favorites = db.Table(
@@ -121,7 +121,7 @@ class Post(db.Model):
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'))
     created_at = db.Column(db.DateTime)
 
-    def __init__(self, type, title, content, user_id, movie_id, created_at=datetime.datetime.now()):
+    def __init__(self, type, title, content, user_id, movie_id, created_at=datetime.now()):
         self.type = type
         self.title = title
         self.content = content
@@ -147,13 +147,17 @@ class Comment(db.Model):
     content = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
+    alias = db.Column(db.String(64))
     created_at = db.Column(db.DateTime)
+    time_since = db.Column(db.DateTime)
 
-    def __init__(self, content, user_id, post_id, created_at=datetime.datetime.now()):
+    def __init__(self, content, user_id, post_id, alias, created_at=datetime.now(), time_since=0):
         self.content = content
         self.user_id = user_id
         self.post_id = post_id
+        self.alias = alias
         self.created_at = created_at
+        self.time_since = time_since
 
 
 def faved(tmdb_id):
