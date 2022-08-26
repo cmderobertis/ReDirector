@@ -1,0 +1,79 @@
+/* 
+@media screen {
+  
+} */
+
+
+.rd-sidebar {
+  top: 6.5rem;
+  left: 1rem;
+}
+
+nav {
+  box-shadow: 0px -2px 0px #6C757D inset;
+}
+
+.card-dark {
+  background-color: #212529;
+  border-color: #F8F9FA;
+}
+
+.card-dark .card-header {
+  background-color: #32383E;
+  border-color: #F8F9FA;
+}
+
+.card-dark .form-control {
+  background-color: #212529;
+  color: #F8F9FA;
+}
+
+.card-dark ul,a {
+  color: #F8F9FA;
+  text-decoration: none;
+  list-style: none;
+}
+
+.card-dark a:hover {
+  color: #198754;
+} 
+
+.rd-icon {
+  padding-top: 1rem;
+}
+
+.rd-icon p {
+  margin-bottom: 0;
+}
+
+
+.rd-icon:hover {
+  background-color: #0f1113;
+  border-radius: 0.5rem;
+}
+
+.rd-icon a:hover {
+  color: #FFF;
+}
+
+.rd-category a.btn-warning:hover {
+  color: #000;
+  background-color: #C89600;
+  border-color: #C89600;
+}
+
+.rd-category a:not(.btn-warning):hover {
+  color: #FFF;
+}
+
+#search_movies {
+  padding: 0 0.8rem;
+}
+
+.icon {
+  max-height: 2rem;
+}
+
+.fa-heart:hover {
+  transform: scale(1.2);
+}

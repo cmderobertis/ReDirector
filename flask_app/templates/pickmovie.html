@@ -1,0 +1,87 @@
+{% extends 'base.html' %} {% block title %}{{title}}{% endblock %} {% block
+content %}
+<div class="row m-0 justify-content-center">
+  {% if movies %}
+  <div class="col-lg-10 col-12">
+    {% else %}
+    <div class="col-lg-4 col-md-6 col-sm-8">
+      {% endif %}
+      <div class="mt-3 card card-dark">
+        <div class="card-header">
+          <div class="card-title text-center">
+            {% if movies %}
+            <h2 class="mb-0">Select Movie</h2>
+            {% else %}
+            <h2 class="mb-0">Search Movies</h2>
+            {% endif %}
+          </div>
+        </div>
+        {% if movies %}
+        <div class="card-body" id="search_movies">
+          <div class="row row-cols-lg-6 row-cols-sm-4 row-cols-2">
+            {% for movie in movies %}
+            <div class="rd-icon col text-center">
+              <a
+                {%
+                if
+                posting
+                %}
+                href="/movie/add/{{movie.id}}"
+                {%
+                else
+                %}
+                href="/{{movie.tmdb_id}}"
+                {%
+                endif
+                %}
+                ><img
+                  class="img-fluid rounded-2"
+                  {%
+                  if
+                  movie.poster_path
+                  %}
+                  src="https://www.themoviedb.org/t/p/w300_and_h450_bestv2{{movie.poster_path}}"
+                  {%
+                  else
+                  %}
+                  src="{{url_for('static', filename='assets/no_poster.png')}}"
+                  {%
+                  endif
+                  %}
+                  alt="{{movie.title}} Poster"
+                />
+                <p>
+                  {{movie.title}} {% if movie.release_date %}
+                  ({{movie.release_date[:4]}}) {% elif movie.year %}
+                  ({{movie.year}}) {% else %} (Unknown) {% endif %}
+                </p>
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% else %}
+        <div class="card-body">
+          <form action="/search" method="post">
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                name="query"
+                class="form-control"
+                id="exampleFormControlInput1"
+                placeholder="title"
+                required
+              />
+              <label for="exampleFormControlInput1" class="form-label"
+                >Title</label
+              >
+            </div>
+            <input class="btn btn-success" type="submit" value="Search" />
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

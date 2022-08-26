@@ -1,0 +1,162 @@
+<div id="top"></div>
+{% extends 'base.html' %} {% block title %} {{title}} {% endblock title %} {%
+block content %} {% if movie %}
+<div class="col-3 pe-2 rd-sidebar position-fixed">
+  <div class="card card-dark">
+    <div class="card-header text-center">
+      <h6 class="card-title fw-bold">{{movie.title}} ({{movie.year}})</h6>
+      <p class="mb-0">{{movie.genre}}</p>
+    </div>
+    <div class="card-body">
+      <div class="row justify-content-center">
+        <a class="col" href="/{{movie.tmdb_id}}">
+          <img
+            style="max-height: 20vh"
+            class="mb-3 rounded-2"
+            {%
+            if
+            movie.poster_path
+            %}
+            src="https://www.themoviedb.org/t/p/w300_and_h450_bestv2{{movie.poster_path}}"
+            {%
+            else
+            %}
+            src="{{url_for('static', filename='assets/no_poster.png')}}"
+            {%
+            endif
+            %}
+            alt="{{movie.title}} poster"
+          />
+        </a>
+      </div>
+      <div class="col"><em class="col">{{movie.description}}</em></div>
+      <div class="row align-items-center">
+        {% if session.user %}
+        <div class="row mb-2">
+          <a
+            class="col ms-3 btn btn-success text-nowrap"
+            href="/movie/add/{{movie.tmdb_id}}"
+            >New Post</a
+          >
+        </div>
+        {% if faved %}
+        <a
+          class="col h2 mb-0 text-danger text-center"
+          href="/fav/remove/{{movie.id}}"
+          ><i class="fa-solid fa-heart"></i
+        ></a>
+        {% else %}
+        <a
+          class="col h2 mb-0 text-danger text-center"
+          href="/fav/add/{{movie.id}}"
+          ><i class="fa-regular fa-heart"></i
+        ></a>
+        {% endif %} {% endif %}
+        <a class="col" href="http://www.imdb.com/title/{{movie.imdb_id}}"
+          ><img
+            style="max-height: 2rem"
+            class="img-fluid"
+            src="{{url_for('static', filename='assets/imdb.png')}}"
+            alt="IMDb"
+        /></a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<div class="row m-0 pt-3 justify-content-center">
+  <div class="col-lg-6 col-md-8 col-sm-10">
+    <div class="row row-cols-1 g-3">
+      {% for upm in upms %}
+      <div class="col">
+        <div class="mx-3 card card-dark">
+          <div class="card-body">
+            <div class="card-title">
+              <h4 class="">{{upm[1].title}}</h4>
+              <div class="px-3 row">
+                <a
+                  {%
+                  if
+                  movie
+                  %}
+                  href="/{{upm[2].tmdb_id}}/{{upm[1].type}}"
+                  {%
+                  elif
+                  user_id
+                  %}
+                  href="/{{user_id}}/posts/{{upm[1].type}}"
+                  {%
+                  else
+                  %}
+                  href="/{{upm[1].type}}"
+                  {%
+                  endif
+                  %}
+                  style="max-height: 1.6em"
+                  class="col mb-3 badge text-bg-{{colors[upm[1].type]}}"
+                  >{{upm[1].type}}</a
+                >
+                <p class="col text-center">
+                  for <a href="/{{upm[2].tmdb_id}}">{{upm[2].title}}</a>
+                </p>
+              </div>
+              <div class="row px-3">
+                <p class="col text-center">
+                  by
+                  <a href="/{{upm[1].user_id}}/posts">{{upm[0].username}}</a>
+                </p>
+                <p class="col text-center text-muted">
+                  on {{upm[1].created_at.strftime('%m/%d/%Y')}}
+                </p>
+              </div>
+            </div>
+            {% if truncate %}
+            <p>{{upm[1].content[:256]}}...</p>
+            <a class="btn btn-dark" href="/post/{{upm[1].id}}">View Post</a>
+            {% else %}
+            <p>{{upm[1].content}}</p>
+            {% for comment in comments %}
+            <div class="row">
+              <div class="col">
+                <p>{{comment.content}}</p>
+              </div>
+              <div class="col-3">
+                <p class="text-muted text-nowrap">
+                  {{comment.created_at.strftime('%m/%d/%Y')}}
+                </p>
+              </div>
+            </div>
+            {% endfor %} {% if session.user %}
+            <form
+              class="row align-items-center"
+              action="/comment/{{upm[1].id}}"
+              method="post"
+            >
+              <div class="col-10 form-floating">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="content"
+                  placeholder="content"
+                />
+                <label class="ms-3" for="content">Comment</label>
+              </div>
+              <div class="col">
+                <input class="btn btn-success" type="submit" value="Post" />
+              </div>
+            </form>
+            {% endif %} {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<a
+  class="btn btn-success rounded-circle position-fixed bottom-0 end-0 m-3"
+  href="#top"
+>
+  <i class="h2 m-0 fa fa-arrow-up"></i>
+</a>
+{% endblock %}

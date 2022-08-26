@@ -1,0 +1,19 @@
+{% extends 'base.html' %} {% block title %} 404 | Not Found {% endblock %} {%
+block content %}
+<div class="bg-dark p-5 row justify-content-center">
+  <div
+    class="position-relative col-lg-6 col-md-8 col-sm-10 bg-success rounded-5"
+  >
+    <img
+      class="position-relative"
+      src="{{url_for('static', filename='assets/travolta_confused.gif')}}"
+      alt="John Travolta confused"
+    />
+    <div class="position-absolute top-0 start-100 translate-middle-x">
+      <p class="text-light display-1 fw-bolder">404</p>
+      <p class="text-light display-1 fw-bolder">404</p>
+      <p class="text-light display-1 fw-bolder">404</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

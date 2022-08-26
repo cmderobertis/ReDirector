@@ -1,0 +1,109 @@
+{% extends 'base.html' %}{% block title %} Registration | ReDirector {% endblock
+title %}{% block content %}
+<div class="container">
+  <div class="row mt-3 justify-content-center">
+    <div class="col-lg-6 col-md-6 col-sm-8">
+      <div class="card-dark card">
+        <h5 class="card-header text-light">Register</h5>
+        <div class="card-body">
+          {% with messages = get_flashed_messages(with_categories = True) %}
+          <form action="/registration" method="post">
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                name="username"
+                id="username"
+                class="form-control"
+                placeholder="username"
+              />
+              <label for="username">Username</label>
+              {% if messages %} {% for category, message in messages %} {% if
+              category == 'username' %}
+              <span class="form-text text-danger">{{message}}</span>
+              {% endif %} {% endfor %} {% endif %}
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                name="first_name"
+                id="first_name"
+                class="form-control"
+                placeholder="first_name"
+              />
+              <label for="first_name" class="form-label">First Name</label>
+              {% if messages %} {% for category, message in messages %} {% if
+              category == 'first_name' %}
+              <span class="form-text text-danger">{{message}}</span>
+              {% endif %} {% endfor %} {% endif %}
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                name="last_name"
+                id="last_name"
+                class="form-control"
+                placeholder="last_name"
+              />
+              <label for="last_name" class="form-label">Last Name</label>
+              {% if messages %} {% for category, message in messages %} {% if
+              category == 'last_name' %}
+              <span class="form-text text-danger">{{message}}</span>
+              {% endif %} {% endfor %} {% endif %}
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                name="email"
+                id="email"
+                class="form-control"
+                placeholder="email"
+              />
+              <label for="email" class="form-label">Email</label>
+              {% if messages %} {% for category, message in messages %} {% if
+              category == 'email' %}
+              <span class="form-text text-danger">{{message}}</span>
+              {% endif %} {% endfor %} {% endif %}
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="password"
+                name="password"
+                id="password"
+                class="form-control"
+                placeholder="password"
+                required
+              />
+              <label for="password" class="form-label">Password</label>
+              {% if messages %} {% for category, message in messages %} {% if
+              category == 'password' %}
+              <span class="form-text text-danger">{{message}}</span>
+              {% endif %} {% endfor %} {% endif %}
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="password"
+                name="password_confirmation"
+                id="password_confirmation"
+                class="form-control"
+                placeholder="password_confirmation"
+                required
+              />
+              <label for="password_confirmation" class="form-label"
+                >Confirm Password</label
+              >
+              {% if messages %} {% for category, message in messages %} {% if
+              category == 'password_confirmation' %}
+              <span class="form-text text-danger">{{message}}</span>
+              {% endif %} {% endfor %} {% endif %}
+            </div>
+            <div class="d-flex justify-content-end">
+              <input type="submit" value="Register" class="btn btn-success" />
+            </div>
+          </form>
+          {% endwith %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
