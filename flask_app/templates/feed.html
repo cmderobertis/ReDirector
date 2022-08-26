@@ -1,9 +1,12 @@
 <div id="top"></div>
 {% extends 'base.html' %} {% block title %} {{title}} {% endblock title %} {%
-block content %} {% if movie %}
-<div class="col-3 pe-2 rd-sidebar position-fixed">
-  <div class="card card-dark">
-    <div class="card-header text-center">
+block content %}
+<!-- MOVIE INFO -->
+{% if movie %}
+<!-- SIDE MOVIE INFO -->
+<div class="d-none d-lg-block col-3 pe-3 rd-sidebar position-fixed">
+  <div class="card card-dark text-center">
+    <div class="card-header">
       <h6 class="card-title fw-bold">{{movie.title}} ({{movie.year}})</h6>
       <p class="mb-0">{{movie.genre}}</p>
     </div>
@@ -29,7 +32,7 @@ block content %} {% if movie %}
           />
         </a>
       </div>
-      <div class="col"><em class="col">{{movie.description}}</em></div>
+      <div class="col pb-3"><em class="col">{{movie.description}}</em></div>
       <div class="row align-items-center">
         {% if session.user %}
         <div class="row mb-2">
@@ -63,17 +66,86 @@ block content %} {% if movie %}
     </div>
   </div>
 </div>
+<!-- END SIDE MOVIE INFO -->
+<!-- TOP MOVIE INFO -->
+<div class="row d-lg-none justify-content-center pt-3 px-3"">
+  <div class="d-lg-none col-lg-6 col-md-8 col-sm-10">
+    <div class="card card-dark">
+      <div class="card-header text-center">
+        <h6 class="card-title fw-bold">{{movie.title}} ({{movie.year}})</h6>
+        <p class="mb-0">{{movie.genre}}</p>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <a class="col-3 pe-0" href="/{{movie.tmdb_id}}">
+            <img
+              style="max-height: 20vh"
+              class="rounded-2 mw-100"
+              {%
+              if
+              movie.poster_path
+              %}
+              src="https://www.themoviedb.org/t/p/w300_and_h450_bestv2{{movie.poster_path}}"
+              {%
+              else
+              %}
+              src="{{url_for('static', filename='assets/no_poster.png')}}"
+              {%
+              endif
+              %}
+              alt="{{movie.title}} poster"
+            />
+          </a>
+          <div class="col-9">
+            <em class="mb-3">{{movie.description}}</em>
+            <div class="row pt-3 align-items-center">
+              {% if session.user %}
+              <a
+                class="col ms-3 btn btn-success text-nowrap"
+                href="/movie/add/{{movie.tmdb_id}}"
+                >New Post</a
+              >
+              {% if faved %}
+              <a
+                class="col h2 mb-0 text-danger text-center"
+                href="/fav/remove/{{movie.id}}"
+                ><i class="fa-solid fa-heart"></i
+              ></a>
+              {% else %}
+              <a
+                class="col h2 mb-0 text-danger text-center"
+                href="/fav/add/{{movie.id}}"
+                ><i class="fa-regular fa-heart"></i
+              ></a>
+              {% endif %} {% endif %}
+              <a class="col" href="http://www.imdb.com/title/{{movie.imdb_id}}"
+                ><img
+                  style="max-height: 2rem"
+                  class="img-fluid"
+                  src="{{url_for('static', filename='assets/imdb.png')}}"
+                  alt="IMDb"
+              /></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END TOP MOVIE INFO -->
 {% endif %}
+<!-- END MOVIE INFO -->
 <div class="row m-0 pt-3 justify-content-center">
   <div class="col-lg-6 col-md-8 col-sm-10">
     <div class="row row-cols-1 g-3">
+      <!-- POSTS -->
       {% for upm in upms %}
       <div class="col">
-        <div class="mx-3 card card-dark">
+        <div class="card card-dark">
           <div class="card-body">
             <div class="card-title">
-              <h4 class="">{{upm[1].title}}</h4>
-              <div class="px-3 row">
+              <h4 class="mb-0">{{upm[1].title}}</h4>
+              <div class="px-3 align-items-center row">
                 <a
                   {%
                   if
@@ -93,42 +165,50 @@ block content %} {% if movie %}
                   endif
                   %}
                   style="max-height: 1.6em"
-                  class="col mb-3 badge text-bg-{{colors[upm[1].type]}}"
+                  class="col badge text-bg-{{colors[upm[1].type]}}"
                   >{{upm[1].type}}</a
                 >
-                <p class="col text-center">
-                  for <a href="/{{upm[2].tmdb_id}}">{{upm[2].title}}</a>
-                </p>
-              </div>
-              <div class="row px-3">
-                <p class="col text-center">
+                <p class="col text-center mb-1">
                   by
                   <a href="/{{upm[1].user_id}}/posts">{{upm[0].username}}</a>
                 </p>
-                <p class="col text-center text-muted">
+              </div>
+              <div class="row px-3">
+                <p class="col text-center m-0">
+                  for <a href="/{{upm[2].tmdb_id}}">{{upm[2].title}}</a>
+                </p>
+                <p class="col text-center text-muted m-0">
                   on {{upm[1].created_at.strftime('%m/%d/%Y')}}
                 </p>
               </div>
             </div>
             {% if truncate %}
+            {% if upm[1].content | length < 256 %}
+            <p>{{upm[1].content}}</p>
+            {% else %}
             <p>{{upm[1].content[:256]}}...</p>
+            {% endif %}
             <a class="btn btn-dark" href="/post/{{upm[1].id}}">View Post</a>
             {% else %}
             <p>{{upm[1].content}}</p>
+            <hr>
+            <!-- COMMENTS -->
             {% for comment in comments %}
             <div class="row">
               <div class="col">
-                <p>{{comment.content}}</p>
+                <p class="mb-1">{{comment.content}}</p>
               </div>
               <div class="col-3">
-                <p class="text-muted text-nowrap">
+                <p class="text-muted text-nowrap mb-1">
                   {{comment.created_at.strftime('%m/%d/%Y')}}
                 </p>
               </div>
             </div>
-            {% endfor %} {% if session.user %}
+            {% endfor %}
+            <!-- END COMMENTS -->
+            {% if session.user %}
             <form
-              class="row align-items-center"
+              class="row align-items-center mb-0"
               action="/comment/{{upm[1].id}}"
               method="post"
             >
@@ -150,6 +230,7 @@ block content %} {% if movie %}
         </div>
       </div>
       {% endfor %}
+      <!-- END POSTS -->
     </div>
   </div>
 </div>

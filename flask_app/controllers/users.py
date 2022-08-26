@@ -1,8 +1,5 @@
 from flask_app import app, db, render_template, request, redirect, bcrypt, session, flash, url_for, EMAIL_REGEX, verify_logged_in
 from models import User, Movie, Post, Comment, favorites, post_likes, comment_likes, faved
-# from flask_app.models.movie import Movie
-# from flask_app.models.post import Post
-# from flask_app.models.comment import Comment
 
 
 @app.route('/')

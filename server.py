@@ -1,5 +1,5 @@
 from flask_app import app
-from flask_app.controllers import users, posts, movies, comments
+from flask_app.controllers import users, posts, movies
 
 
 if __name__ == '__main__':
