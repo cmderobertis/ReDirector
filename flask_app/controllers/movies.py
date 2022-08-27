@@ -1,4 +1,4 @@
-from flask_app import app, db, render_template, request, redirect, make_response, bcrypt, session, flash, url_for, requests, os, verify_logged_in
+from flask_app import app, db, render_template, request, redirect, make_response, bcrypt, session, flash, url_for, requests, os, verify_logged_in, datetime, timedelta
 from models import User, Movie, Post, Comment, favorites, post_likes, comment_likes, faved
 import tmdbsimple as tmdb
 tmdb.API_KEY = f"{os.getenv('API_KEY')}"
@@ -8,7 +8,18 @@ tmdb.API_KEY = f"{os.getenv('API_KEY')}"
 def movie_posts(id):
     upms = db.session.query(User, Post, Movie).select_from(User).join(
         Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Movie.tmdb_id == id).order_by(Post.created_at.desc()).all()
-    print(upms)
+    # Set post timestamp
+    for upm in upms:
+        delta = (datetime.now() - upm[1].created_at)
+        seconds = delta.seconds
+        minutes = f"{seconds//60} min. ago"
+        hours = f"{seconds//3600} hr. ago"
+        days = f"{delta.days} d. ago"
+        weeks = f"{delta.days//7} wk. ago"
+        for unit in [weeks, days, hours, minutes]:
+            if int(unit[:1]) > 0:
+                upm[1].time_since = unit
+                break
     return render_template('feed.html', upms=upms, movie=upms[0][2], faved=faved(id), truncate=True, title=f"{upms[0][2].title} Posts | ReDirector")
 
 
@@ -16,6 +27,18 @@ def movie_posts(id):
 def movie_posts_by_type(id, type):
     upms = db.session.query(User, Post, Movie).select_from(User).join(
         Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Movie.tmdb_id == id).filter(Post.type == type).order_by(Post.created_at.desc()).all()
+    # Set post timestamp
+    for upm in upms:
+        delta = (datetime.now() - upm[1].created_at)
+        seconds = delta.seconds
+        minutes = f"{seconds//60} min. ago"
+        hours = f"{seconds//3600} hr. ago"
+        days = f"{delta.days} d. ago"
+        weeks = f"{delta.days//7} wk. ago"
+        for unit in [weeks, days, hours, minutes]:
+            if int(unit[:1]) > 0:
+                upm[1].time_since = unit
+                break
     return render_template('feed.html', movie=upms[0][2], faved=faved(id), upms=upms, truncate=True, title=f"{type} Posts | {upms[0][2].title} | ReDirector")
 
 

@@ -116,6 +116,7 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'))
     created_at = db.Column(db.DateTime)
+    time_since = db.Column(db.String(64))
 
     def __init__(self, type, title, content, user_id, movie_id, created_at, time_since=''):
         self.type = type
@@ -124,6 +125,7 @@ class Post(db.Model):
         self.user_id = user_id
         self.movie_id = movie_id
         self.created_at = created_at
+        self.time_since = time_since
 
     def __repr__(self):
         return f"Post: {self.title}"

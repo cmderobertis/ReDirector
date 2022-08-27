@@ -39,9 +39,9 @@
   <body class="text-bg-dark">
     <div class="sticky-top">
       <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <div class="container-fluid">
+        <div class="container-xl">
           <a class="navbar-brand text-center" href="/">
-            <h2 class="fw-bold mb-0">
+            <h2 class="fw-bold mb-0 text-light">
               <i class="mx-1 fa-solid fa-clapperboard"></i
               ><span class="text-success">Re</span>Director
             </h2>
@@ -109,6 +109,12 @@
     </div>
     {% set colors = { 'A Better Ending': 'primary', 'Alternate Storyline':
     'success', 'Sequel | Prequel | Reboot': 'danger', 'Recast': 'warning',
-    'Other': 'secondary' } %} {% block content %} {% endblock content %}
+    'Other': 'secondary' } %}
+    <div class="container-xl position-relative p-0">
+      {% block content %} {% endblock content %}
+    </div>
+    <footer>
+
+    </footer>
   </body>
 </html>

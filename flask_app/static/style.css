@@ -1,5 +1,5 @@
 .rd-sidebar {
-  top: 6.7rem;
+  top: 2rem;
   left: 1rem;
 }
 
@@ -10,6 +10,7 @@ nav {
 .card-dark {
   background-color: #212529;
   border-color: #F8F9FA;
+  color: #F8F9FA;
 }
 
 .card-dark .card-header {
@@ -26,11 +27,24 @@ nav {
   color: #F8F9FA;
   text-decoration: none;
   list-style: none;
+  transition-duration: 0.2s;
 }
 
 .card-dark a:hover {
   color: #198754;
-} 
+}
+
+.btn-dark {
+  border: 1px solid #32383E;
+}
+
+.btn-dark:hover {
+  background-color: #1A1D20;
+}
+
+.post-card-body {
+  padding-top: 0;
+}
 
 .rd-icon {
   padding-top: 1rem;
@@ -42,7 +56,7 @@ nav {
 
 
 .rd-icon:hover {
-  background-color: #0f1113;
+  background-color: #1A1D20;
   border-radius: 0.5rem;
 }
 
@@ -68,11 +82,20 @@ nav {
   max-height: 2rem;
 }
 
-.rd-circle-icon {
+.post-content {
+  background-color: #1A1D20;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.rd-movie-icon {
   object-fit: cover;
-  height: 3rem;
-  width: 3rem;
-  border-radius: 50%;
+  height: 4rem;
+  width: 4rem;
+  border: 1px solid white;
+  border-radius: 0.3rem 0 0.5rem 0;
+  position: relative;
+  right: 1rem;
 }
 
 .fa-heart:hover {

@@ -1,4 +1,4 @@
-from flask_app import app, db, render_template, request, redirect, bcrypt, session, flash, url_for, EMAIL_REGEX, verify_logged_in
+from flask_app import app, db, render_template, request, redirect, bcrypt, session, flash, url_for, EMAIL_REGEX, verify_logged_in, datetime, timedelta
 from models import User, Movie, Post, Comment, favorites, post_likes, comment_likes, faved
 
 
@@ -6,6 +6,18 @@ from models import User, Movie, Post, Comment, favorites, post_likes, comment_li
 def index():
     upms = db.session.query(User, Post, Movie).select_from(User).join(
         Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).order_by(Post.created_at.desc()).all()
+    # Set post timestamp
+    for upm in upms:
+        delta = (datetime.now() - upm[1].created_at)
+        seconds = delta.seconds
+        minutes = f"{seconds//60} min. ago"
+        hours = f"{seconds//3600} hr. ago"
+        days = f"{delta.days} d. ago"
+        weeks = f"{delta.days//7} wk. ago"
+        for unit in [weeks, days, hours, minutes]:
+            if int(unit[:1]) > 0:
+                upm[1].time_since = unit
+                break
     return render_template('feed.html', upms=upms, truncate=True, title='Main Feed | ReDirector')
 
 
