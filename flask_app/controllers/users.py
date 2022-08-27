@@ -4,7 +4,6 @@ from models import User, Movie, Post, Comment, favorites, post_likes, comment_li
 
 @app.route('/')
 def index():
-    posts = Post.query.all()
     upms = db.session.query(User, Post, Movie).select_from(User).join(
         Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).order_by(Post.created_at.desc()).all()
     return render_template('feed.html', upms=upms, truncate=True, title='Main Feed | ReDirector')
@@ -26,10 +25,11 @@ def register():
         db.session.commit()
         user = User.query.filter_by(
             email=request.form['email']).first()
-        session['user'] = user.first_name
+        session['firt_name'] = user.first_name
         session['user_id'] = user.id
+        session['username'] = user.username
         print(
-            f"Logged in {session['user']} with ID {session['user_id']}")
+            f"Logged in {session['first_name']} with ID {session['user_id']}")
         return redirect('/')
     else:
         return render_template('registration.html')
@@ -55,10 +55,11 @@ def login():
             flash('Invalid Password', 'log_password')
             return redirect('/login')
         # email and password are valid
-        session['user'] = user_in_db.first_name
+        session['first_name'] = user_in_db.first_name
         session['user_id'] = user_in_db.id
+        session['username'] = user_in_db.username
         print(
-            f"Logged in {session['user']} with ID {session['user_id']}")
+            f"Logged in {session['username']} ({session['first_name']})")
         return redirect(request.form['last_route'])
     else:
         return render_template('login.html', last_route=request.referrer)
@@ -66,7 +67,8 @@ def login():
 
 @app.route('/logout')
 def logout():
-    print(f"Logging out {session['user']}")
+    print(f"Logged out {session['username']} ({session['first_name']})")
     session.pop('user_id', None)
-    session.pop('user', None)
+    session.pop('first_name', None)
+    session.pop('username', None)
     return redirect(request.referrer)

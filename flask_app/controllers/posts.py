@@ -19,13 +19,23 @@ def new_post():
         content = request.form['content']
         user_id = session['user_id']
         movie_id = request.form['id']
-        post = Post(type, title, content, user_id, movie_id)
+        post = Post(type, title, content, user_id, movie_id, datetime.now())
         db.session.add(post)
         db.session.commit()
         post_id = post.id
         return redirect(f"/post/{post_id}")
     else:
         return render_template('pickmovie.html', title="Movie Search | ReDirector")
+
+
+@app.route('/comment/<int:post_id>', methods=['POST'])
+def add_comment(post_id):
+    content = request.form['content']
+    comment = Comment(
+        content, session['user_id'], post_id, random.choice(names), datetime.now())
+    db.session.add(comment)
+    db.session.commit()
+    return redirect(f"/post/{post_id}")
 
 
 @app.route('/post/<int:id>')
@@ -74,16 +84,6 @@ def view_posts_by_user_and_type(user_id, type):
     if 'user_id' in session and user_id == session['user_id']:
         my = 'My '
     return render_template('feed.html', upms=upms, truncate=True, title=my + "Posts | ReDirector")
-
-
-@app.route('/comment/<int:id>', methods=['POST'])
-def add_comment(id):
-    content = request.form['content']
-    comment = Comment(
-        content, session['user_id'], id, random.choice(names), datetime.now())
-    db.session.add(comment)
-    db.session.commit()
-    return redirect(f"/post/{id}")
 
 
 @app.route('/categories')

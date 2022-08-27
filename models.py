@@ -33,8 +33,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True,
                    nullable=False)
     username = db.Column(db.String(45), unique=True)
-    password = db.Column(db.String(255))
     email = db.Column(db.String(45), unique=True)
+    password = db.Column(db.String(255))
     first_name = db.Column(db.String(64))
     last_name = db.Column(db.String(64))
     favorites = db.relationship(
@@ -48,18 +48,11 @@ class User(db.Model):
         self.last_name = last_name
 
     def __repr__(self):
-        return f"User {self.username}"
+        return f"User: {self.username}"
 
     @staticmethod
     def validate_user(user: dict) -> bool:
         is_valid = True
-        # ensures proper length
-        if len(user['first_name']) < 3:
-            is_valid = False
-            flash('Name must be at least 3 characters', 'first_name')
-        if len(user['last_name']) < 3:
-            is_valid = False
-            flash('Name must be at least 3 characters.', 'last_name')
         # disallows numerals in first/last name
         if any(c.isnumeric() for c in user['first_name']):
             is_valid = False
@@ -110,6 +103,9 @@ class Movie(db.Model):
         self.tmdb_id = tmdb_id
         self.poster_path = poster_path
 
+    def __repr__(self):
+        return f"Movie: {self.title}"
+
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -121,13 +117,16 @@ class Post(db.Model):
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'))
     created_at = db.Column(db.DateTime)
 
-    def __init__(self, type, title, content, user_id, movie_id, created_at=datetime.now()):
+    def __init__(self, type, title, content, user_id, movie_id, created_at, time_since=''):
         self.type = type
         self.title = title
         self.content = content
         self.user_id = user_id
         self.movie_id = movie_id
         self.created_at = created_at
+
+    def __repr__(self):
+        return f"Post: {self.title}"
 
     @staticmethod
     def validate_post(post: dict) -> bool:
@@ -158,6 +157,9 @@ class Comment(db.Model):
         self.alias = alias
         self.created_at = created_at
         self.time_since = time_since
+
+    def __repr__(self):
+        return f"Comm: {self.content}"
 
 
 def faved(tmdb_id):

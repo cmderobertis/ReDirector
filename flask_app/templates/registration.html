@@ -15,6 +15,7 @@ title %}{% block content %}
                 id="username"
                 class="form-control"
                 placeholder="username"
+                required
               />
               <label for="username">Username</label>
               {% if messages %} {% for category, message in messages %} {% if
@@ -57,6 +58,7 @@ title %}{% block content %}
                 id="email"
                 class="form-control"
                 placeholder="email"
+                required
               />
               <label for="email" class="form-label">Email</label>
               {% if messages %} {% for category, message in messages %} {% if

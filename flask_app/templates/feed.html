@@ -230,6 +230,7 @@ block content %}
             {% endfor %}
             <!-- END COMMENTS -->
             {% if session.user %}
+            <!-- COMMENT BOX -->
             <form
               class="row align-items-center mb-0"
               action="/comment/{{upm[1].id}}"
@@ -248,6 +249,7 @@ block content %}
                 <input class="btn btn-success" type="submit" value="Post" />
               </div>
             </form>
+            <!-- END COMMENT BOX -->
             {% endif %} {% endif %}
           </div>
         </div>
@@ -257,10 +259,12 @@ block content %}
     </div>
   </div>
 </div>
+<!-- GOTO TOP -->
 <a
   class="btn btn-success rounded-circle position-fixed bottom-0 end-0 m-3"
   href="#top"
 >
   <i class="h2 m-0 fa fa-arrow-up"></i>
 </a>
+<!-- END GOTO TOP -->
 {% endblock %}
