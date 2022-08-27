@@ -34,8 +34,18 @@ def view_post(id):
         Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).filter(Post.id == id).order_by(Post.created_at.desc()).first()
     comments = db.session.query(Comment).filter(
         Comment.post_id == id).order_by(Comment.created_at).all()
+    # Set timestamp
     for comment in comments:
-        comment.time_since = (datetime.now() - comment.created_at).seconds//60
+        delta = (datetime.now() - comment.created_at)
+        seconds = delta.seconds
+        minutes = f"{seconds//60} min. ago"
+        hours = f"{seconds//3600} hr. ago"
+        days = f"{delta.days} d. ago"
+        weeks = f"{delta.days//7} wk. ago"
+        for unit in [weeks, days, hours, minutes]:
+            if int(unit[:1]) > 0:
+                comment.time_since = unit
+                break
     return render_template('feed.html', upms=[upms], movie=upms[2], comments=comments, truncate=False, faved=faved(upms[2].tmdb_id), title=f"{upms[2].title} | ReDirector")
 
 
@@ -69,7 +79,8 @@ def view_posts_by_user_and_type(user_id, type):
 @app.route('/comment/<int:id>', methods=['POST'])
 def add_comment(id):
     content = request.form['content']
-    comment = Comment(content, session['user_id'], id, random.choice(names))
+    comment = Comment(
+        content, session['user_id'], id, random.choice(names), datetime.now())
     db.session.add(comment)
     db.session.commit()
     return redirect(f"/post/{id}")

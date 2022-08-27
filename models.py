@@ -149,9 +149,9 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
     alias = db.Column(db.String(64))
     created_at = db.Column(db.DateTime)
-    time_since = db.Column(db.DateTime)
+    time_since = db.Column(db.String(64))
 
-    def __init__(self, content, user_id, post_id, alias, created_at=datetime.now(), time_since=0):
+    def __init__(self, content, user_id, post_id, alias, created_at, time_since=''):
         self.content = content
         self.user_id = user_id
         self.post_id = post_id

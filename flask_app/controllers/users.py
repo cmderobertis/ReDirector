@@ -6,7 +6,7 @@ from models import User, Movie, Post, Comment, favorites, post_likes, comment_li
 def index():
     posts = Post.query.all()
     upms = db.session.query(User, Post, Movie).select_from(User).join(
-        Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).all()
+        Post).join(Movie).where(Post.user_id == User.id and Post.movie_id == Movie.id).order_by(Post.created_at.desc()).all()
     return render_template('feed.html', upms=upms, truncate=True, title='Main Feed | ReDirector')
 
 

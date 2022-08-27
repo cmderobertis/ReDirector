@@ -144,7 +144,27 @@ block content %}
         <div class="card card-dark">
           <div class="card-body">
             <div class="card-title">
-              <h4 class="mb-0">{{upm[1].title}}</h4>
+              <div class="row">
+                <h4 class="col mb-0">{{upm[1].title}}</h4>
+                {% if not movie %}
+                <a class="col-2 m-0" href="/{{upm[2].tmdb_id}}"><img
+              class="rd-circle-icon"
+              {%
+              if
+              upm[2].poster_path
+              %}
+              src="https://www.themoviedb.org/t/p/w300_and_h450_bestv2{{upm[2].poster_path}}"
+              {%
+              else
+              %}
+              src="{{url_for('static', filename='assets/no_poster.png')}}"
+              {%
+              endif
+              %}
+              alt="{{upm[2].title}} icon"
+            /></a>
+                {% endif %}
+              </div>
               <div class="px-3 align-items-center row">
                 <a
                   {%
@@ -174,9 +194,11 @@ block content %}
                 </p>
               </div>
               <div class="row px-3">
+                {% if not movie %}
                 <p class="col text-center m-0">
-                  for <a href="/{{upm[2].tmdb_id}}">{{upm[2].title}}</a>
+                  <a href="/{{upm[2].tmdb_id}}">{{upm[2].title}}</a>
                 </p>
+                {% endif %}
                 <p class="col text-center text-muted m-0">
                   on {{upm[1].created_at.strftime('%m/%d/%Y')}}
                 </p>
@@ -199,9 +221,9 @@ block content %}
                 <p class="text-success mb-1">{{comment.alias}}</p>
                 <p class="ps-3 mb-1">{{comment.content}}</p>
               </div>
-              <div class="col-3">
+              <div class="col-3 text-end">
                 <p class="text-muted text-nowrap mb-1">
-                  {{comment.time_since}} min. ago
+                  {{comment.time_since}}
                 </p>
               </div>
             </div>

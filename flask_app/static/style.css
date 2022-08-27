@@ -68,6 +68,13 @@ nav {
   max-height: 2rem;
 }
 
+.rd-circle-icon {
+  object-fit: cover;
+  height: 3rem;
+  width: 3rem;
+  border-radius: 50%;
+}
+
 .fa-heart:hover {
   transform: scale(1.2);
 }
